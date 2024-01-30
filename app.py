@@ -203,6 +203,53 @@ def compute_cirr_results(caption: str, combiner: Combiner, n_retrieved: int, ref
 
     return sorted_group_names, sorted_index_names, target_name
 
+def compute_cirr_results_test(caption: str, combiner: Combiner, n_retrieved: int, reference_name: str) -> Tuple[
+    Union[list, object], np.array, str]:
+    """
+    Combine visual-text features and compute CIRR results
+    :param caption: relative caption
+    :param combiner: CIRR Combiner network
+    :param n_retrieved: number of images to retrieve
+    :param reference_name: reference image name
+    :return: Tuple made of: 1) top group index names (when known) 2)top 'n_retrieved' index names , 3) target_name (when known)
+    """
+    target_name = ""
+    group_members = ""
+    sorted_group_names = ""
+
+    index_features = cirr_index_features.to(device)
+    index_names = cirr_index_names
+
+    # Check if the query belongs to the validation set and get query info
+    for triplet in cirr_val_triplets:
+        if triplet['reference'] == reference_name and triplet['caption'] == caption:
+            target_name = triplet['target_hard']
+            group_members = triplet['img_set']['members']
+            index_features = cirr_test_index_features.to(device)
+            index_names = cirr_test_index_names
+
+    # Get visual features, extract textual features and compute combined features
+    text_inputs = clip.tokenize(caption, truncate=True).to(device)
+    try:
+        reference_index = index_names.index(reference_name)
+        reference_features = index_features[reference_index].unsqueeze(0)
+    except Exception:  # raise an exception if the reference image has been uploaded by the user
+        image_path = app.config['UPLOAD_FOLDER'] / 'cirr' / reference_name
+        pil_image = PIL.Image.open(image_path).convert('RGB')
+        image = targetpad_transform(1.25, clip_model.visual.input_resolution)(pil_image).to(device)
+        reference_features = clip_model.encode_image(image.unsqueeze(0))
+
+    with torch.no_grad():
+        text_features = clip_model.encode_text(text_inputs)
+        predicted_features = combiner.combine_features(reference_features, text_features).squeeze(0)
+
+    # Sort the results and get the top 50
+    score, sorted_indices = index.search(predicted_features.unsqueeze(0), n_retrieved)
+    sorted_index_names = np.array(index_names)[sorted_indices].flatten()
+    sorted_index_names = np.delete(sorted_index_names, np.where(sorted_index_names == reference_name))
+
+    return sorted_group_names, sorted_index_names, target_name
+        
 
 @app.route('/get_image/<string:image_name>')
 @app.route('/get_image/<string:image_name>/<int:dim>')
