@@ -217,7 +217,7 @@ def compute_cirr_results_test(caption: str, combiner: Combiner, n_retrieved: int
     group_members = ""
     sorted_group_names = ""
 
-    index_features = cirr_test_index_names.to(device)
+    index_features = cirr_test_index_features.to(device)
     index_names = cirr_test_index_names
 
     # Check if the query belongs to the validation set and get query info
