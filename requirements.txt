@@ -3,3 +3,5 @@ torchvision
 flask==2.0.2
 git+https://github.com/openai/CLIP.git
 Werkzeug==2.2.2
+faiss-cpu
+faiss-gpu
