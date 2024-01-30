@@ -12,6 +12,8 @@ import PIL.ImageOps
 import clip
 import numpy as np
 import torch
+import faiss
+
 from flask import Flask, send_file, url_for
 from flask import render_template, request, redirect
 from torchvision.transforms.functional import resize
@@ -195,9 +197,7 @@ def compute_cirr_results(caption: str, combiner: Combiner, n_retrieved: int, ref
         predicted_features = combiner.combine_features(reference_features, text_features).squeeze(0)
 
     # Sort the results and get the top 50
-    index_features = F.normalize(index_features)
-    cos_similarity = index_features @ predicted_features.T
-    sorted_indices = torch.topk(cos_similarity, n_retrieved, largest=True).indices.cpu()
+    score, sorted_indices = index.search(predicted_features.unsqueeze(0), n_retrieved)
     sorted_index_names = np.array(index_names)[sorted_indices].flatten()
     sorted_index_names = np.delete(sorted_index_names, np.where(sorted_index_names == reference_name))
 
@@ -271,6 +271,10 @@ def _load_assets():
     cirr_combiner = torch.hub.load(server_base_path, source='local', model='combiner', dataset='cirr')
     cirr_combiner = torch.jit.script(cirr_combiner).type(data_type).to(device).eval()
 
+    # Load faiss
+    global index
+    index = faiss.IndexFlatIP(640)
+    index.add(cirr_val_index_features)
 
 def load_cirr_assets():
     global cirr_val_triplets
