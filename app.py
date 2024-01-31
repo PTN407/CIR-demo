@@ -203,7 +203,7 @@ def compute_cirr_results(caption: str, combiner: Combiner, n_retrieved: int, ref
 
     return sorted_group_names, sorted_index_names, target_name
 
-def compute_cirr_results_test(caption: str, combiner: Combiner, n_retrieved: int, reference_name: str) -> Tuple[
+def compute_cirr_results_test(caption: str, clip_model, combiner: Combiner, n_retrieved: int, reference_name: str) -> Tuple[
     Union[list, object], np.array, str]:
     """
     Combine visual-text features and compute CIRR results
