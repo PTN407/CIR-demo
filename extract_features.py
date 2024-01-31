@@ -60,7 +60,7 @@ def main():
         gdown.download('https://drive.google.com/uc?id=15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU', 'cirr_clip_RN50x4_fullft.pt')
     
     clip_model, clip_preprocess = clip.load("RN50x4")
-    clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'])
+    clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'], map_location=device)
     clip_model.eval()
     
     input_dim = clip_model.visual.input_resolution
