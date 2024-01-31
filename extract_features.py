@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 import os
 
-from data_utils import FashionIQDataset, targetpad_transform, CIRRDataset, data_path
+from data_utils import targetpad_transform, CIRRDataset, data_path
 from utils import collate_fn
 
 if torch.cuda.is_available():
@@ -17,7 +17,7 @@ else:
     device = torch.device("cpu")
 
 
-def extract_and_save_index_features(dataset: Union[CIRRDataset, FashionIQDataset], clip_model: nn.Module,
+def extract_and_save_index_features(dataset: CIRRDataset, clip_model: nn.Module,
                                     feature_dim: int, file_name: str):
     """
     Extract CIRR or fashionIQ features (with the respective names) from a dataset object and save them into a file
