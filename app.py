@@ -296,8 +296,6 @@ def _load_assets():
     try:
         device
     except Exception:
-        global device
-        global data_type
         if torch.cuda.is_available():
             device = torch.device("cuda")
             data_type = torch.float16
