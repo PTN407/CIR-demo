@@ -275,7 +275,8 @@ def compute_cirr_results_test_relative(captions: list, cirr_test_index_features,
         for cap in captions:
             text_inputs = clip.tokenize(cap, truncate=True).to(device)
             text_features = clip_model.encode_text(text_inputs)
-            predicted_features = combiner.combine_features(predicted_features, text_features).squeeze(0)
+            predicted_features = combiner.combine_features(predicted_features, text_features)
+        predicted_features = predicted_features.squeeze(0)
 
     # Sort the results and get the top 50
     score, sorted_indices = index.search(predicted_features.unsqueeze(0), n_retrieved)
