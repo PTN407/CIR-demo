@@ -56,8 +56,8 @@ def extract_and_save_index_features(dataset: CIRRDataset, clip_model: nn.Module,
 def main():
     # define clip model and preprocess pipeline, get input_dim and feature_dim
     if not os.path.isfile('cirr_comb_RN50x4_fullft.pt'):
-        gdown.download('https://drive.google.com/file/d/16yNRb4RpVSpOaHljE6XrCbrkgDyscTL-/view?usp=sharing', 'cirr_comb_RN50x4_fullft.pt')
-        gdown.download('https://drive.google.com/file/d/15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU/view?usp=sharing', 'cirr_clip_RN50x4_fullft.pt')
+        gdown.download('https://drive.google.com/uc?id=16yNRb4RpVSpOaHljE6XrCbrkgDyscTL-', 'cirr_comb_RN50x4_fullft.pt')
+        gdown.download('https://drive.google.com/uc?id=15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU', 'cirr_clip_RN50x4_fullft.pt')
     
     clip_model, clip_preprocess = clip.load("RN50x4")
     clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'])
