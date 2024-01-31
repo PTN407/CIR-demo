@@ -321,7 +321,7 @@ def _load_assets():
     # Load faiss
     global index
     index = faiss.IndexFlatIP(640)
-    index.add(cirr_val_index_features)
+    index.add(cirr_test_index_features)
 
 def load_cirr_assets():
     global cirr_val_triplets
