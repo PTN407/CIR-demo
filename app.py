@@ -293,16 +293,7 @@ def _load_assets():
     """
     Load all the necessary assets
     """
-    try:
-        device
-    except Exception:
-        if torch.cuda.is_available():
-            device = torch.device("cuda")
-            data_type = torch.float16
-        else:
-            device = torch.device("cpu")
-            data_type = torch.float32
-
+    
     app.config['UPLOAD_FOLDER'].mkdir(exist_ok=True, parents=True)
     p = Process(target=delete_uploaded_images)
     p.start()
@@ -325,8 +316,8 @@ def _load_assets():
         gdown.download('https://drive.google.com/uc?id=16yNRb4RpVSpOaHljE6XrCbrkgDyscTL-', 'cirr_comb_RN50x4_fullft.pt')
         gdown.download('https://drive.google.com/uc?id=15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU', 'cirr_clip_RN50x4_fullft.pt')
     
-    clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'], map_location=device)
-    cirr_combiner.load_state_dict(torch.load('cirr_comb_RN50x4_fullft.pt')['Combiner'], map_location=device)
+    clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'], map_location = torch.device("cpu"))
+    cirr_combiner.load_state_dict(torch.load('cirr_comb_RN50x4_fullft.pt')['Combiner'], map_location = torch.device("cpu"))
     
     clip_model = clip_model.eval().to(device)
     
