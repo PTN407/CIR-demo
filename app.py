@@ -303,13 +303,23 @@ def _load_assets():
     # Load CLIP model and Combiner networks
     global clip_model
     global clip_preprocess
+    
     clip_model, clip_preprocess = clip.load("RN50x4")
+    
     clip_model = clip_model.eval().to(device)
 
     global cirr_combiner
     cirr_combiner = torch.hub.load(server_base_path, source='local', model='combiner', dataset='cirr')
     cirr_combiner = torch.jit.script(cirr_combiner).type(data_type).to(device).eval()
 
+    # Load pretrained
+    if not os.path.isfile('cirr_comb_RN50x4_fullft.pt):
+        gdown.download('https://drive.google.com/file/d/16yNRb4RpVSpOaHljE6XrCbrkgDyscTL-/view?usp=sharing', 'cirr_comb_RN50x4_fullft.pt')
+        gdown.download('https://drive.google.com/file/d/15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU/view?usp=sharing', 'cirr_clip_RN50x4_fullft.pt')
+    
+    clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'])
+    cirr_combiner.load_state_dict(torch.load('cirr_comb_RN50x4_fullft.pt')['Combiner'])
+    
     # Load faiss
     global index
     index = faiss.IndexFlatIP(640)
