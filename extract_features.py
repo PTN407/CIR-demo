@@ -1,6 +1,6 @@
 import pickle
 from typing import Union
-
+import gdown
 import clip
 import torch
 from torch import nn
@@ -54,8 +54,12 @@ def extract_and_save_index_features(dataset: Union[CIRRDataset, FashionIQDataset
 
 def main():
     # define clip model and preprocess pipeline, get input_dim and feature_dim
+    gdown.download('https://drive.google.com/file/d/16yNRb4RpVSpOaHljE6XrCbrkgDyscTL-/view?usp=sharing', 'cirr_comb_RN50x4_fullft.pt')
+    gdown.download('https://drive.google.com/file/d/15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU/view?usp=sharing', 'cirr_clip_RN50x4_fullft.pt')
     clip_model, clip_preprocess = clip.load("RN50x4")
+    clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'])
     clip_model.eval()
+    
     input_dim = clip_model.visual.input_resolution
     feature_dim = clip_model.visual.output_dim
     preprocess = targetpad_transform(1.25, input_dim)
@@ -66,13 +70,13 @@ def main():
     cirr_test_dataset = CIRRDataset('test1', preprocess)
     extract_and_save_index_features(cirr_test_dataset, clip_model, feature_dim, 'cirr_test')
 
-    # extract and save fashionIQ features
-    dress_types = ['dress', 'toptee', 'shirt']
-    for dress_type in dress_types:
-        val_dataset = FashionIQDataset('val', [dress_type], preprocess)
-        extract_and_save_index_features(val_dataset, clip_model, feature_dim, f'fashionIQ_val_{dress_type}')
-        test_dataset = FashionIQDataset('test', [dress_type], preprocess)
-        extract_and_save_index_features(test_dataset, clip_model, feature_dim, f'fashionIQ_test_{dress_type}')
+    # # extract and save fashionIQ features
+    # dress_types = ['dress', 'toptee', 'shirt']
+    # for dress_type in dress_types:
+    #     val_dataset = FashionIQDataset('val', [dress_type], preprocess)
+    #     extract_and_save_index_features(val_dataset, clip_model, feature_dim, f'fashionIQ_val_{dress_type}')
+    #     test_dataset = FashionIQDataset('test', [dress_type], preprocess)
+    #     extract_and_save_index_features(test_dataset, clip_model, feature_dim, f'fashionIQ_test_{dress_type}')
 
 
 if __name__ == '__main__':
