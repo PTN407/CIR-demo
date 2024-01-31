@@ -220,8 +220,8 @@ def compute_cirr_results_test(caption: str, combiner: Combiner, n_retrieved: int
     index_features = cirr_test_index_features.to(device)
     index_names = cirr_test_index_names
 
-    # Check if the query belongs to the validation set and get query info
-    for triplet in cirr_val_triplets:
+    # Check if the query belongs to the test set and get query info
+    for triplet in cirr_test_triplets:
         if triplet['reference'] == reference_name and triplet['caption'] == caption:
             target_name = triplet['target_hard']
             group_members = triplet['img_set']['members']
@@ -327,7 +327,11 @@ def load_cirr_assets():
     global cirr_val_triplets
     with open(server_base_path / 'cirr_dataset' / 'cirr' / 'captions' / f'cap.rc2.val.json') as f:
         cirr_val_triplets = json.load(f)
-
+    
+    global cirr_test_triplets
+    with open(server_base_path / 'cirr_dataset' / 'cirr' / 'captions' / f'cap.rc2.test1.json') as f:
+        cirr_test_triplets = json.load(f)
+        
     global cirr_name_to_relpath
     with open(server_base_path / 'cirr_dataset' / 'cirr' / 'image_splits' / f'split.rc2.val.json') as f:
         cirr_name_to_relpath = json.load(f)
