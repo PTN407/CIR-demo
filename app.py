@@ -219,15 +219,7 @@ def compute_cirr_results_test(caption: str, combiner: Combiner, n_retrieved: int
 
     index_features = cirr_test_index_features.to(device)
     index_names = cirr_test_index_names
-
-    # Check if the query belongs to the test set and get query info
-    for triplet in cirr_test_triplets:
-        if triplet['reference'] == reference_name and triplet['caption'] == caption:
-            target_name = triplet['target_hard']
-            group_members = triplet['img_set']['members']
-            index_features = cirr_test_index_features.to(device)
-            index_names = cirr_test_index_names
-
+        
     # Get visual features, extract textual features and compute combined features
     text_inputs = clip.tokenize(caption, truncate=True).to(device)
     try:
