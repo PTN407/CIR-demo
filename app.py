@@ -306,8 +306,6 @@ def _load_assets():
     global clip_preprocess
     
     clip_model, clip_preprocess = clip.load("RN50x4")
-    
-    clip_model = clip_model.eval().to(device)
 
     global cirr_combiner
     cirr_combiner = torch.hub.load(server_base_path, source='local', model='combiner', dataset='cirr')
@@ -320,6 +318,8 @@ def _load_assets():
     
     clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'], map_location=device)
     cirr_combiner.load_state_dict(torch.load('cirr_comb_RN50x4_fullft.pt')['Combiner'], map_location=device)
+    
+    clip_model = clip_model.eval().to(device)
     
     # Load faiss
     global index
