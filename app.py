@@ -313,7 +313,7 @@ def _load_assets():
     cirr_combiner = torch.jit.script(cirr_combiner).type(data_type).to(device).eval()
 
     # Load pretrained
-    if not os.path.isfile('cirr_comb_RN50x4_fullft.pt):
+    if not os.path.isfile('cirr_comb_RN50x4_fullft.pt'):
         gdown.download('https://drive.google.com/file/d/16yNRb4RpVSpOaHljE6XrCbrkgDyscTL-/view?usp=sharing', 'cirr_comb_RN50x4_fullft.pt')
         gdown.download('https://drive.google.com/file/d/15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU/view?usp=sharing', 'cirr_clip_RN50x4_fullft.pt')
     
