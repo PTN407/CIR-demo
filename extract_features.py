@@ -7,6 +7,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import os
+import torch.nn.functional as F
 
 from data_utils import targetpad_transform, CIRRDataset, data_path
 from utils import collate_fn
