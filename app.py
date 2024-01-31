@@ -318,8 +318,8 @@ def _load_assets():
         gdown.download('https://drive.google.com/uc?id=16yNRb4RpVSpOaHljE6XrCbrkgDyscTL-', 'cirr_comb_RN50x4_fullft.pt')
         gdown.download('https://drive.google.com/uc?id=15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU', 'cirr_clip_RN50x4_fullft.pt')
     
-    clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'])
-    cirr_combiner.load_state_dict(torch.load('cirr_comb_RN50x4_fullft.pt')['Combiner'])
+    clip_model.load_state_dict(torch.load('cirr_clip_RN50x4_fullft.pt')['CLIP'], map_location=device)
+    cirr_combiner.load_state_dict(torch.load('cirr_comb_RN50x4_fullft.pt')['Combiner'], map_location=device)
     
     # Load faiss
     global index
