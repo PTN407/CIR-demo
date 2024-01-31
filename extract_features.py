@@ -45,9 +45,9 @@ def extract_and_save_index_features(dataset: CIRRDataset, clip_model: nn.Module,
         with torch.no_grad():
             batch_features = clip_model.encode_image(images)
             index_features = torch.vstack((index_features, batch_features))
-            index_features = F.normalize(index_features, dim=-1).float()
             index_names.extend(names)
-
+            
+    index_features = F.normalize(index_features, dim=-1).float()
     # save the extracted features
     data_path.mkdir(exist_ok=True, parents=True)
     torch.save(index_features, data_path / f"{file_name}_index_features.pt")
