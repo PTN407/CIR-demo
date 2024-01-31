@@ -55,7 +55,7 @@ def extract_and_save_index_features(dataset: Union[CIRRDataset, FashionIQDataset
 
 def main():
     # define clip model and preprocess pipeline, get input_dim and feature_dim
-    if not os.path.isfile('cirr_comb_RN50x4_fullft.pt):
+    if not os.path.isfile('cirr_comb_RN50x4_fullft.pt'):
         gdown.download('https://drive.google.com/file/d/16yNRb4RpVSpOaHljE6XrCbrkgDyscTL-/view?usp=sharing', 'cirr_comb_RN50x4_fullft.pt')
         gdown.download('https://drive.google.com/file/d/15KmKHilfPuBQTwmiHQchGoiQgSq4KoBU/view?usp=sharing', 'cirr_clip_RN50x4_fullft.pt')
     
