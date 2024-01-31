@@ -293,6 +293,17 @@ def _load_assets():
     """
     Load all the necessary assets
     """
+    try:
+        device
+    except Exception:
+        global device
+        global data_type
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+            data_type = torch.float16
+        else:
+            device = torch.device("cpu")
+            data_type = torch.float32
 
     app.config['UPLOAD_FOLDER'].mkdir(exist_ok=True, parents=True)
     p = Process(target=delete_uploaded_images)
