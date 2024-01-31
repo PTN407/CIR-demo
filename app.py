@@ -13,6 +13,7 @@ import clip
 import numpy as np
 import torch
 import faiss
+import gdown
 
 from flask import Flask, send_file, url_for
 from flask import render_template, request, redirect
