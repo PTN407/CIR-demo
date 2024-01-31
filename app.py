@@ -238,9 +238,7 @@ def compute_cirr_results_test(caption: str, cirr_test_index_features, clip_model
         text_features = clip_model.encode_text(text_inputs)
         predicted_features = combiner.combine_features(reference_features, text_features).squeeze(0)
 
-    # Sort the results and get the top 50
-    predicted_features = F.normalize(predicted_features, dim=-1).float()
-    
+    # Sort the results and get the top 50    
     score, sorted_indices = index.search(predicted_features.unsqueeze(0), n_retrieved)
     sorted_index_names = np.array(index_names)[sorted_indices].flatten()
     sorted_index_names = np.delete(sorted_index_names, np.where(sorted_index_names == reference_name))
