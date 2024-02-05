@@ -325,7 +325,8 @@ def _load_assets():
     
     # Load faiss
     global index
-    index = faiss.IndexFlatIP(640)
+    index = faiss.index_factory(640, "PCA320,IVF10_HNSW32,Flat")
+    index.train(cirr_test_index_features)
     index.add(cirr_test_index_features)
 
 def load_cirr_assets():
